@@ -5,7 +5,7 @@ import logging
 from telethon import TelegramClient, events
 from twilio.rest import Client
 
-from utils.constantes import WORDS_TO_SEARCH, CHANNELS_ALLOWED
+from utils.constants import WORDS_TO_SEARCH, CHANNELS_ALLOWED
 
 logging.basicConfig(
     level=logging.INFO,
