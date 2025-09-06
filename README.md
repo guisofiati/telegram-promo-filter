@@ -1,29 +1,53 @@
 # Telegram Promo Filter
 
-Um aplicativo para filtrar mensagens de canais de promoções do Telegram com base em palavras-chave específicas e enviar a promo para o WhatsApp pessoal.  
+Bot para filtrar mensagens de canais de promoções do Telegram com base em palavras-chave específicas e enviar a mensagem da promo para o WhatsApp.  
 
 ## Funcionalidades
 
-- Filtra mensagens de **vários canais do Telegram**.
+- Filtra mensagens de **vários canais de promo do Telegram**.
 - Procura por **palavras-chave específicas** definidas pelo usuário.
-- Envia mensagens para o **WhatsApp** quando alguma palavra-chave é encontrada.
-- Configuração simples de **palavras e canais**.
-- Atualmente rodando localmente.
+- Envia a mensagem filtrada para o **WhatsApp** quando alguma palavra-chave é encontrada.
+- Configuração simples por comandos no Telegram
 
-## Estrutura do Projeto
-
-- **utils/constantes.ts**  
-  Contém duas listas principais:
-  - `WORDS_TO_SEARCH`: lista de palavras-chave que serão monitoradas.  
-    ```py
-    WORDS_TO_SEARCH = ['PLAYSTATION 5', 'XBOX', 'B650M'];
+## Comandos (Telegram)
+  - `/l`: Lista todas as palavras que estão sendo ouvidas no momento. Ex:  
+    ```markdown
+    /l
+    
+    Lista de itens:
+    1. PS5
+    2. B650M
+    3. Ryzen 5
     ```
-  - `CHANNELS_ALLOWED`: lista de canais do Telegram que o app irá monitorar. Obs: Não é necesário colocar @ dos canais
-    ```py
-    CHANNELS_ALLOWED = ['@canal1', '@canal2', '@canal3'];
+  - `/a <palavra>`: Adiciona uma nova palavra ao dicionário. Ex:
     ```
-
-- **Evento da mensagem**  
-  O app escuta mensagens dos canais permitidos e, caso alguma palavra da lista seja encontrada, dispara a notificação para o WhatsApp.
-
-## TODO: como usar
+    Lista de itens:
+    1. PS5
+    2. B650M
+    3. Ryzen 5
+    
+    /a RTX 5090
+    
+    Lista de itens:
+    1. PS5
+    2. B650M
+    3. Ryzen 5
+    4. RTX 5090
+    ```
+  - `/r <numero>`: Remove uma nova palavra da lista informando o número. Ex:
+    ```
+    Lista de itens:
+    1. Monitor AOC 27
+    2. RTX 3060
+    3. Playstation 5
+    
+    /r 2
+    
+    Lista de itens:
+    1. Monitor AOC 27
+    2. Playstation 5
+    ```
+    
+## TODO
+  - Enviar comandos pelo próprio whatsapp
+  - Poder adicionar/remover os canais de promo para ouvir a lista
