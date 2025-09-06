@@ -81,11 +81,15 @@ async def main():
         if arg.isdigit():
             num_item = int(arg)
             if 1 <= num_item <= len(WORDS_LISTENING):
+                item = WORDS_LISTENING[num_item-1]
                 WORDS_LISTENING.pop(num_item-1)
-                await event.reply(f"Word {arg} removed to listener.\n{get_words_listening()}")
+                logger.info(f"Word {item} removed from listener.")
+                await event.reply(f"Word {item} removed from listener.\n{get_words_listening()}")
             else:
+                logger.warning(f"Item index {arg} not found in words")
                 await event.reply(f"Item index {arg} not found in words")
         else:
+            logger.warning(f"Item index {arg} not found in words")
             await event.reply('Error. You must pass a number from the list above. i.e: /r 2')
 
     @client_telegram.on(events.NewMessage(from_users="me", chats="me", pattern=r"^/a(?:\s+(.*))?"))
@@ -93,8 +97,10 @@ async def main():
         word = event.pattern_match.group(0)[3:].strip()
         if len(word) <= 30:
             WORDS_LISTENING.append(word)
-            await event.reply(f"Word added to listener.\n{get_words_listening()}")
+            logger.info(f"Word {word} added to listener")
+            await event.reply(f"Word {word} added to listener.\n{get_words_listening()}")
         else:
+            logger.warning(f"Phrase or word too long")
             await event.reply(f"Phrase or word too long")
 
     await client_telegram.run_until_disconnected()
