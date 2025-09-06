@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import logging
 
 from telethon import TelegramClient, events
+from telethon.sessions import StringSession
 from twilio.rest import Client
 
 logging.basicConfig(
@@ -22,7 +23,9 @@ twilio_token = os.getenv('TWILIO_TOKEN')
 twilio_to_phone = os.getenv('TWILIO_TO_PHONE')
 twilio_from_phone = os.getenv('TWILIO_FROM_PHONE')
 
-client_telegram = TelegramClient(telethon_session_name, telethon_api_id, telethon_api_hash)
+session_hash = os.getenv('SESSION_HASH')
+
+client_telegram = TelegramClient(StringSession(session_hash), telethon_api_id, telethon_api_hash)
 client_twilio = Client(twilio_sid, twilio_token)
 
 CHANNELS_LISTENING = [
@@ -38,10 +41,7 @@ CHANNELS_LISTENING = [
 WORDS_LISTENING = []
 
 async def main():
-    await client_telegram.start(
-        phone=lambda: input('Phone: '),
-        password=lambda: input('Password: ')
-    )
+    await client_telegram.start()
 
     logger.info('[CLIENT_TELETHON] Client started successfully.')
     logger.info(f'[CLIENT_TELETHON] Listening words: {WORDS_LISTENING}')
