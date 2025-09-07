@@ -40,6 +40,8 @@ CHANNELS_LISTENING = [
 
 WORDS_LISTENING = []
 
+already_sent_message_empty_list_to_user = False
+
 async def main():
     await client_telegram.start()
 
@@ -55,19 +57,29 @@ async def main():
 
     @client_telegram.on(events.NewMessage(chats=CHANNELS_LISTENING))
     async def handler(event):
-        text = event.raw_text
-        logger.info(f'[CLIENT_TELETHON] Text: {text}')
+        try:
+            global already_sent_message_empty_list_to_user
+            if len(WORDS_LISTENING) == 0:
+                logger.warning("No words listening. Please add using /a <word> at your telegram saved messages.")
+                if not already_sent_message_empty_list_to_user:
+                    client_twilio.messages.create(
+                        to=twilio_to_phone,
+                        from_=twilio_from_phone,
+                        body="No words listening. Please add using /a <word> at your telegram saved messages."
+                    )
+                return
 
-        if any(word.lower() in text.lower() for word in WORDS_LISTENING):
-            logger.info(f'[CLIENT_TELETHON] A word matches from list. Sending message to whatsapp...')
-            # await client_telegram.send_message('me', text) # to send to my telegram pv
-            try:
+            text = event.raw_text
+            logger.info(f'[CLIENT_TELETHON] Text: {text}')
+
+            if any(word.lower() in text.lower() for word in WORDS_LISTENING):
+                logger.info(f'[CLIENT_TELETHON] A word matches from list. Sending message to whatsapp...')
                 client_twilio.messages.create(
                     to=twilio_to_phone,
                     from_=twilio_from_phone,
                     body=text
                 )
-            except Exception as e:
+        except Exception as e:
                 logger.error(f'Error: {e}')
 
     @client_telegram.on(events.NewMessage(from_users="me", chats="me", pattern=r"^/l"))
