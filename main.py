@@ -67,6 +67,7 @@ async def main():
                         from_=twilio_from_phone,
                         body="No words listening. Please add using /a <word> at your telegram saved messages."
                     )
+                    already_sent_message_empty_list_to_user = True
                 return
 
             text = event.raw_text
