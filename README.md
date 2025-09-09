@@ -53,3 +53,4 @@ Bot para filtrar mensagens de canais de promoções do Telegram com base em pala
   - Enviar comandos pelo próprio whatsapp
   - Poder adicionar/remover os canais de promo para ouvir a lista
   - Apos 30m de nenhuma mensagem em nenhum canal o bot entra em stand-by e reinicia quando uma nova mensagem chega, perdendo o state (palavras salvas)
+  - Logs 

@@ -71,7 +71,6 @@ async def main():
                 return
 
             text = event.raw_text
-            logger.info(f'[CLIENT_TELETHON] Text: {text}')
 
             if any(word.lower() in text.lower() for word in WORDS_LISTENING):
                 logger.info(f'[CLIENT_TELETHON] A word matches from list. Sending message to whatsapp...')
@@ -80,6 +79,7 @@ async def main():
                     from_=twilio_from_phone,
                     body=text
                 )
+                logger.info(f'[CLIENT_TELETHON] Message sent successfully')
         except Exception as e:
                 logger.error(f'Error: {e}')
 
@@ -102,8 +102,8 @@ async def main():
                 logger.warning(f"Item index {arg} not found in words")
                 await event.reply(f"Item index {arg} not found in words")
         else:
-            logger.warning(f"Item index {arg} not found in words")
-            await event.reply('Error. You must pass a number from the list above. i.e: /r 2')
+            logger.warning("Error. You must pass a number from the list above. i.e: /r 2")
+            await event.reply("Error. You must pass a number from the list above. i.e: /r 2")
 
     @client_telegram.on(events.NewMessage(from_users="me", chats="me", pattern=r"^/a(?:\s+(.*))?"))
     async def add_word(event):
