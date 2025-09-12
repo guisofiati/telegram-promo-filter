@@ -9,9 +9,11 @@ Bot para filtrar mensagens de canais de promoções do Telegram com base em pala
 - Envia a mensagem filtrada para o **WhatsApp** quando alguma palavra-chave é encontrada.
 - Configuração simples por comandos no Telegram
 - Bot online 24/7
+- Armazena as palavras em um banco de dados Redis 
 
 ## Comandos (Telegram)
-  - `/l`: Lista todas as palavras que estão sendo ouvidas no momento. Ex:  
+  - `/l`: Lista todas as palavras que estão sendo ouvidas no momento. Ex:
+
     ```markdown
     /l
     
@@ -21,6 +23,7 @@ Bot para filtrar mensagens de canais de promoções do Telegram com base em pala
     3. Ryzen 5
     ```
   - `/a <palavra>`: Adiciona uma nova palavra a lista. Ex:
+
     ```
     Lista de itens:
     1. PS5
@@ -36,6 +39,7 @@ Bot para filtrar mensagens de canais de promoções do Telegram com base em pala
     4. RTX 5090
     ```
   - `/r <numero>`: Remove uma nova palavra da lista informando o número. Ex:
+
     ```
     Lista de itens:
     1. Monitor AOC 27
@@ -52,5 +56,5 @@ Bot para filtrar mensagens de canais de promoções do Telegram com base em pala
 ## TODO
   - Enviar comandos pelo próprio whatsapp
   - Poder adicionar/remover os canais de promo para ouvir a lista
-  - Apos 30m de nenhuma mensagem em nenhum canal o bot entra em stand-by e reinicia quando uma nova mensagem chega, perdendo o state (palavras salvas)
   - Logs 
+  - Sandbox ilimitada (sem reiniciar em 72h)  
