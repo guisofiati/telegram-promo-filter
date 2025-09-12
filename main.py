@@ -24,8 +24,8 @@ twilio_token = os.getenv('TWILIO_TOKEN')
 twilio_to_phone = os.getenv('TWILIO_TO_PHONE')
 twilio_from_phone = os.getenv('TWILIO_FROM_PHONE')
 
-upstash_url = os.getenv('UPSTASH_URL')
-upstash_token = os.getenv('UPSTASH_TOKEN')
+upstash_url = os.getenv('UPSTASH_REDIS_REST_URL')
+upstash_token = os.getenv('UPSTASH_REDIS_REST_TOKEN')
 upstash_key = os.getenv('UPSTASH_KEY')
 
 session_hash = os.getenv('SESSION_HASH')
