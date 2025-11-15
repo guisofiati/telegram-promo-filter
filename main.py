@@ -99,8 +99,8 @@ async def main():
                 text = event.raw_text
                 text_formated = event.raw_text.replace("\n", " ")
 
-                logger.info(f'[CLIENT_TELETHON] Text: {text}')
-                logger.info(f'[CLIENT_TELETHON] Text formated: {text_formated}')
+#                logger.info(f'[CLIENT_TELETHON] Text: {text}')
+#                logger.info(f'[CLIENT_TELETHON] Text formated: {text_formated}')
 
                 if any(word.lower() in text.lower() for word in words_listening):
                     logger.info(f'[CLIENT_TELETHON] A word matches from list. Sending message to whatsapp...')
