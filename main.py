@@ -19,10 +19,10 @@ telethon_api_id = int(os.getenv('TELETHON_API_ID'))
 telethon_api_hash = os.getenv('TELETHON_API_HASH')
 telethon_session_name = os.getenv('TELETHON_SESSION_NAME')
 
-twilio_sid = os.getenv('TWILIO_SID')
-twilio_token = os.getenv('TWILIO_TOKEN')
-twilio_to_phone = os.getenv('TWILIO_TO_PHONE')
-twilio_from_phone = os.getenv('TWILIO_FROM_PHONE')
+# twilio_sid = os.getenv('TWILIO_SID')
+# twilio_token = os.getenv('TWILIO_TOKEN')
+# twilio_to_phone = os.getenv('TWILIO_TO_PHONE')
+# twilio_from_phone = os.getenv('TWILIO_FROM_PHONE')
 
 upstash_url = os.getenv('UPSTASH_REDIS_REST_URL')
 upstash_token = os.getenv('UPSTASH_REDIS_REST_TOKEN')
@@ -30,8 +30,10 @@ upstash_key = os.getenv('UPSTASH_KEY')
 
 session_hash = os.getenv('SESSION_HASH')
 
+destination_channel = os.getenv('DESTINATION_CHANNEL')
+
 client_telegram = TelegramClient(StringSession(session_hash), telethon_api_id, telethon_api_hash)
-client_twilio = Client(twilio_sid, twilio_token)
+# client_twilio = Client(twilio_sid, twilio_token)
 
 channels_listening = [
     'cmdiasyoutube',
@@ -46,6 +48,23 @@ channels_listening = [
 words_listening = []
 
 already_sent_message_empty_list_to_user = False
+
+async def get_channel_id():
+    await client_telegram.start()
+
+    print("\nCANAIS E GRUPOS\n")
+
+    # Lista todos os diálogos (conversas, canais, grupos)
+    async for dialog in client_telegram.iter_dialogs():
+        # Filtra apenas canais e supergrupos
+        if dialog.is_channel or dialog.is_group:
+            print(f"Nome: {dialog.name}")
+            print(f"ID: {dialog.id}")
+            print(f"Username: @{dialog.entity.username}" if dialog.entity.username else "Username: (privado)")
+            print(f"Tipo: {'Canal' if dialog.is_channel else 'Grupo'}")
+            print("-" * 50)
+
+    await client_telegram.disconnect()
 
 async def main():
     try:
@@ -68,23 +87,29 @@ async def main():
                 if len(words_listening) == 0:
                     logger.warning("No words listening. Please add using /a <word> at your telegram saved messages.")
                     if not already_sent_message_empty_list_to_user:
-                        client_twilio.messages.create(
-                            to=twilio_to_phone,
-                            from_=twilio_from_phone,
-                            body="No words listening. Please add using /a <word> at your telegram saved messages."
-                        )
+#                        client_twilio.messages.create(
+#                            to=twilio_to_phone,
+#                            from_=twilio_from_phone,
+#                            body="No words listening. Please add using /a <word> at your telegram saved messages."
+#                       )
+                        await client_telegram.send_message(destination_channel, 'No words listening. Please add using /a <word> at your telegram saved messages.')
                         already_sent_message_empty_list_to_user = True
                     return
 
                 text = event.raw_text
+                text_formated = event.raw_text.replace("\n", " ")
+
+                logger.info(f'[CLIENT_TELETHON] Text: {text}')
+                logger.info(f'[CLIENT_TELETHON] Text formated: {text_formated}')
 
                 if any(word.lower() in text.lower() for word in words_listening):
                     logger.info(f'[CLIENT_TELETHON] A word matches from list. Sending message to whatsapp...')
-                    client_twilio.messages.create(
-                        to=twilio_to_phone,
-                        from_=twilio_from_phone,
-                        body=text
-                    )
+#                    client_twilio.messages.create(
+#                        to=twilio_to_phone,
+#                        from_=twilio_from_phone,
+#                        body=text
+#                    )
+                    await client_telegram.send_message(destination_channel, message=text)
                     logger.info(f'[CLIENT_TELETHON] Message sent successfully')
             except Exception as err:
                 logger.error(f'Error: {err}')
