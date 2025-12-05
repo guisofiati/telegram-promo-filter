@@ -1,6 +1,5 @@
 import os
 
-from Demos.win32ts_logoff_disconnected import username
 from dotenv import load_dotenv
 import logging
 
