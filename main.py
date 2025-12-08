@@ -45,22 +45,10 @@ users_mentions = []
 
 already_sent_message_empty_list_to_user = False
 
-async def get_channel_id():
-    await client_telegram.start()
-
-    print("\nCANAIS E GRUPOS\n")
-
-    # Lista todos os diálogos (conversas, canais, grupos)
-    async for dialog in client_telegram.iter_dialogs():
-        # Filtra apenas canais e supergrupos
-        if dialog.is_channel or dialog.is_group:
-            print(f"Nome: {dialog.name}")
-            print(f"ID: {dialog.id}")
-            print(f"Username: @{dialog.entity.username}" if dialog.entity.username else "Username: (privado)")
-            print(f"Tipo: {'Canal' if dialog.is_channel else 'Grupo'}")
-            print("-" * 50)
-
-    await client_telegram.disconnect()
+def matches_keywords(text, keyword):
+    text_to_lower = text.lower()
+    keywords = keyword.lower().split
+    return all(word in text_to_lower for word in keywords)
 
 async def main():
     try:
@@ -91,8 +79,8 @@ async def main():
 
                 text = event.raw_text
 
-                if any(word.lower() in text.lower() for word in words_listening):
-                    logger.info(f'A word matches from list. Sending message...')
+                if any(matches_keywords(text, keyword) for keyword in words_listening):
+                    logger.info(f'A word matches from list. Sending message to channel...')
                     await client_telegram.send_message(destination_channel, message=text)
                     if users_mentions:
                         mentions = ' '.join([f'@{user}' for user in users_mentions])
