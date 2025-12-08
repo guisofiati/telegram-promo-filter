@@ -5,7 +5,6 @@ import logging
 
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
-from twilio.rest import Client
 from upstash_redis import Redis
 
 logging.basicConfig(
@@ -20,11 +19,6 @@ telethon_api_id = int(os.getenv('TELETHON_API_ID'))
 telethon_api_hash = os.getenv('TELETHON_API_HASH')
 telethon_session_name = os.getenv('TELETHON_SESSION_NAME')
 
-# twilio_sid = os.getenv('TWILIO_SID')
-# twilio_token = os.getenv('TWILIO_TOKEN')
-# twilio_to_phone = os.getenv('TWILIO_TO_PHONE')
-# twilio_from_phone = os.getenv('TWILIO_FROM_PHONE')
-
 upstash_url = os.getenv('UPSTASH_REDIS_REST_URL')
 upstash_token = os.getenv('UPSTASH_REDIS_REST_TOKEN')
 upstash_key_words = os.getenv('UPSTASH_KEY_WORDS')
@@ -35,7 +29,6 @@ session_hash = os.getenv('SESSION_HASH')
 destination_channel = os.getenv('DESTINATION_CHANNEL')
 
 client_telegram = TelegramClient(StringSession(session_hash), telethon_api_id, telethon_api_hash)
-# client_twilio = Client(twilio_sid, twilio_token)
 
 channels_listening = [
     'cmdiasyoutube',
@@ -92,29 +85,14 @@ async def main():
                 if len(words_listening) == 0:
                     logger.warning("No words listening. Please add using /a <word> at your telegram saved messages.")
                     if not already_sent_message_empty_list_to_user:
-#                        client_twilio.messages.create(
-#                            to=twilio_to_phone,
-#                            from_=twilio_from_phone,
-#                            body="No words listening. Please add using /a <word> at your telegram saved messages."
-#                       )
                         await client_telegram.send_message(destination_channel, 'No words listening. Please add using /a <word> at your telegram saved messages.')
                         already_sent_message_empty_list_to_user = True
                     return
 
                 text = event.raw_text
-#               text_formated = event.raw_text.replace("\n", " ")
-
-#                logger.info(f'[CLIENT_TELETHON] Text: {text}')
-#                logger.info(f'[CLIENT_TELETHON] Text formated: {text_formated}')
 
                 if any(word.lower() in text.lower() for word in words_listening):
-    #               logger.info(f'[CLIENT_TELETHON] A word matches from list. Sending message to whatsapp...')
                     logger.info(f'A word matches from list. Sending message...')
-#                    client_twilio.messages.create(
-#                        to=twilio_to_phone,
-#                        from_=twilio_from_phone,
-#                        body=text
-#                    )
                     await client_telegram.send_message(destination_channel, message=text)
                     if users_mentions:
                         mentions = ' '.join([f'@{user}' for user in users_mentions])
