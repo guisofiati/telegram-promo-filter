@@ -47,7 +47,7 @@ already_sent_message_empty_list_to_user = False
 
 def matches_keywords(text, keyword):
     text_to_lower = text.lower()
-    keywords = keyword.lower().split
+    keywords = keyword.lower().split()
     return all(word in text_to_lower for word in keywords)
 
 async def main():
